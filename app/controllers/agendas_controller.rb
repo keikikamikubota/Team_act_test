@@ -21,6 +21,16 @@ class AgendasController < ApplicationController
     end
   end
 
+  def destroy
+    @agenda = Agenda.find(params[:id])
+    if current_user == @agenda.team.owner
+      @agenda.destroy
+      redirect_to dashboard_url, notice: I18n.t('views.messages.delete_agenda')
+    else
+      redirect_to dashboard_url, notice: I18n.t('views.messages.cannot_delete_agenda_without_owner')
+    end
+  end
+
   private
 
   def set_agenda
